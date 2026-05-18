@@ -55,7 +55,7 @@ const T: Record<Lang, Record<string, string>> = {
     realistic: "Realistic timeline", target: "Target return (yearly)", steps: "Step by step plan",
     where: "Where to keep it safe", mistakes: "Mistakes to AVOID",
     convTitle: "Currency Converter", from: "Currency", to: "Convert to", amount: "Amount", convert: "CONVERT",
-    lang: "English",
+    lang: "English", downloadPdf: "DOWNLOAD PDF", pdfTitle: "Financial Plan", pdfDate: "Date", pdfSummary: "Summary",
   },
   es: {
     start: "START", converter: "CONVERSOR", finances: "FINANCES",
