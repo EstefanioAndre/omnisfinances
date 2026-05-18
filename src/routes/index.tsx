@@ -70,7 +70,7 @@ const T: Record<Lang, Record<string, string>> = {
     realistic: "Plazo realista", target: "Retorno objetivo (anual)", steps: "Plan paso a paso",
     where: "Dónde guardarlo seguro", mistakes: "Errores a EVITAR",
     convTitle: "Conversor de Monedas", from: "Moneda", to: "Convertir a", amount: "Cantidad", convert: "CONVERTIR",
-    lang: "Español",
+    lang: "Español", downloadPdf: "DESCARGAR PDF", pdfTitle: "Plan Financiero", pdfDate: "Fecha", pdfSummary: "Resumen",
   },
 };
 
