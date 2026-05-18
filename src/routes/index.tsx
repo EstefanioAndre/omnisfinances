@@ -413,9 +413,138 @@ function Result({ t, plan, onBack }: { t: Record<string, string>; plan: PlanData
             {generated.mistakes.map((m, i) => <li key={i} className="leading-relaxed">{m}</li>)}
           </ul>
         </Card>
+        </Card>
+
+        <button
+          onClick={() => downloadPlanPDF(t, plan, generated)}
+          className="w-full flex items-center justify-center gap-2 rounded-2xl py-4 font-bold tracking-wider text-[#04122e]"
+          style={{
+            background: "linear-gradient(180deg,#bae6fd,#7dd3fc)",
+            boxShadow: "0 0 25px rgba(125,211,252,0.7), inset 0 1px 0 rgba(255,255,255,0.6)",
+          }}
+        >
+          <Download className="w-5 h-5" />
+          {t.downloadPdf}
+        </button>
       </div>
     </div>
   );
+}
+
+function downloadPlanPDF(
+  t: Record<string, string>,
+  plan: PlanData,
+  g: ReturnType<typeof buildPlan>,
+) {
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
+  const W = doc.internal.pageSize.getWidth();
+  const M = 48;
+  let y = 56;
+
+  const methodLbl = plan.payMethod === "credit" ? t.m_credit : plan.payMethod === "cash" ? t.m_cash : t.m_none;
+  const freqLbl = plan.payFreq === "daily" ? t.f_daily : plan.payFreq === "weekly" ? t.f_weekly : plan.payFreq === "monthly" ? t.f_monthly : t.f_none;
+
+  const ensure = (h: number) => {
+    if (y + h > doc.internal.pageSize.getHeight() - M) {
+      doc.addPage();
+      y = 56;
+    }
+  };
+  const heading = (txt: string) => {
+    ensure(28);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.setTextColor(14, 116, 165);
+    doc.text(txt, M, y);
+    y += 18;
+    doc.setDrawColor(186, 230, 253);
+    doc.line(M, y - 8, W - M, y - 8);
+  };
+  const para = (txt: string) => {
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    doc.setTextColor(30, 41, 59);
+    const lines = doc.splitTextToSize(txt, W - M * 2);
+    for (const line of lines) {
+      ensure(16);
+      doc.text(line, M, y);
+      y += 15;
+    }
+  };
+  const kv = (k: string, v: string) => {
+    ensure(16);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(30, 41, 59);
+    doc.text(`${k}: `, M, y);
+    const kw = doc.getTextWidth(`${k}: `);
+    doc.setFont("helvetica", "normal");
+    doc.text(v, M + kw, y);
+    y += 16;
+  };
+  const bullets = (items: string[], ordered = false) => {
+    items.forEach((it, i) => {
+      const prefix = ordered ? `${i + 1}. ` : "•  ";
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(11);
+      doc.setTextColor(30, 41, 59);
+      const lines = doc.splitTextToSize(prefix + it, W - M * 2 - 12);
+      lines.forEach((ln: string, idx: number) => {
+        ensure(15);
+        doc.text(ln, M + (idx === 0 ? 0 : 14), y);
+        y += 14;
+      });
+      y += 3;
+    });
+  };
+
+  // Header
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(22);
+  doc.setTextColor(4, 18, 46);
+  doc.text("OMNIS FINANCES", M, y);
+  y += 22;
+  doc.setFontSize(13);
+  doc.setTextColor(14, 116, 165);
+  doc.text(t.pdfTitle, M, y);
+  y += 16;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(100);
+  doc.text(`${t.pdfDate}: ${new Date().toLocaleDateString()}`, M, y);
+  y += 22;
+
+  heading(t.pdfSummary);
+  kv(t.income, money(plan.income));
+  kv(t.savings, money(plan.savings));
+  kv(t.months, String(plan.months));
+  kv(t.method, methodLbl);
+  kv(t.freq, freqLbl);
+  y += 6;
+
+  heading(t.diagnosis);
+  para(g.diagnosis);
+  y += 6;
+
+  heading(`${t.goal} ${money(plan.savings * 2)}`);
+  kv(t.monthlySave, money(g.monthlySave));
+  kv(t.incomePct, `${g.savingPct.toFixed(1)}%`);
+  kv(t.realistic, `${g.realisticMonths}`);
+  kv(t.target, `${(g.targetReturn * 100).toFixed(1)}%`);
+  y += 6;
+
+  heading(t.steps);
+  bullets(g.steps, true);
+  y += 6;
+
+  heading(t.where);
+  bullets(g.vehicles);
+  y += 6;
+
+  heading(t.mistakes);
+  bullets(g.mistakes);
+
+  doc.save(`omnis-plano-${new Date().toISOString().slice(0, 10)}.pdf`);
 }
 
 function Card({ title, children, accent = "#38bdf8" }: { title: string; children: React.ReactNode; accent?: string }) {
