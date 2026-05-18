@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { ArrowLeft, ChevronDown, Globe, ArrowRightLeft } from "lucide-react";
+import { ArrowLeft, ChevronDown, Globe, ArrowRightLeft, Download } from "lucide-react";
+import { jsPDF } from "jspdf";
 
 export const Route = createFileRoute("/")({
   head: () => ({
