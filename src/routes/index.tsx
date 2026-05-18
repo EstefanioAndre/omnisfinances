@@ -413,7 +413,7 @@ function Result({ t, plan, onBack }: { t: Record<string, string>; plan: PlanData
             {generated.mistakes.map((m, i) => <li key={i} className="leading-relaxed">{m}</li>)}
           </ul>
         </Card>
-        </Card>
+
 
         <button
           onClick={() => downloadPlanPDF(t, plan, generated)}
