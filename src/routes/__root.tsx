@@ -72,14 +72,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "OMNIS FINACES" },
+      { name: "description", content: "Este app melhora seu desempenho em finanças e ajuda no desenvolvimento e crescimento amplo da sua visão de investimento e aumneto de seus ganhos" },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "OMNIS FINACES" },
+      { property: "og:description", content: "Este app melhora seu desempenho em finanças e ajuda no desenvolvimento e crescimento amplo da sua visão de investimento e aumneto de seus ganhos" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "OMNIS FINACES" },
+      { name: "twitter:description", content: "Este app melhora seu desempenho em finanças e ajuda no desenvolvimento e crescimento amplo da sua visão de investimento e aumneto de seus ganhos" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/286b0a7d-2e63-41f1-b45f-83ffa6826ff4/id-preview-783ffef7--2f6535a5-f3c6-4f5a-b3bc-d761def4ec1d.lovable.app-1779132282898.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/286b0a7d-2e63-41f1-b45f-83ffa6826ff4/id-preview-783ffef7--2f6535a5-f3c6-4f5a-b3bc-d761def4ec1d.lovable.app-1779132282898.png" },
     ],
     links: [
       {
